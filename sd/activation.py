@@ -1,10 +1,14 @@
-import torch
-from torch import nn
-import math
+import numpy as np
 
-class ReLU(nn.Module):
+class ReLU():
     def __init__(self):
-        super().__init__()
+        self.cache = None
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.clamp(x, min=0)
+    def forward(self, x):
+        self.cache = x
+        return np.maximum(0, x)
+    
+    def backward(self, dout):
+        x = self.cache
+        dx = dout*(x > 0)
+        return dx
